@@ -3,6 +3,7 @@ import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { ShoppingCartIcon } from "@heroicons/react/20/solid";
+import { Link } from "react-router-dom";
 
 const user = {
   name: "Tom Cook",
@@ -66,6 +67,7 @@ const Navbar = ({ children }) => {
                   </div>
                   <div className="hidden md:block">
                     <div className="ml-4 flex items-center md:ml-6">
+                      <Link to="/cart">
                       <button
                         type="button"
                         className="rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
@@ -76,6 +78,7 @@ const Navbar = ({ children }) => {
                           aria-hidden="true"
                         />
                       </button>
+                      </Link>
                         <span className="inline-flex items-center rounded-md mb-6 -ml-3 bg-blue-50 px-1 py-0.5 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
                           3
                         </span>
@@ -178,6 +181,7 @@ const Navbar = ({ children }) => {
                         {user.email}
                       </div>
                     </div>
+                    <Link to="/cart">
                     <button
                       type="button"
                       className="ml-auto flex-shrink-0 rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
@@ -189,6 +193,7 @@ const Navbar = ({ children }) => {
                       />
                     
                     </button>
+                    </Link>
                     <span className="inline-flex items-center rounded-md mb-6 -ml-3 bg-blue-50 px-1 py-0.5 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
                           3
                         </span>
