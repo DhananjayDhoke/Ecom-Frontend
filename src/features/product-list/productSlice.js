@@ -1,22 +1,28 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { fetchCount } from './productAPI';
+import { fetchAllProduct, fetchProductByFilter } from './productAPI';
 
 const initialState = {
-  value: 0,
+  products: [],
   status: 'idle',
 };
 
-export const incrementAsync = createAsyncThunk(
-  'counter/fetchCount',
-  async (amount) => {
-    const response = await fetchCount(amount);
-    // The value we return becomes the `fulfilled` action payload
+export const fetchAllProductAsync = createAsyncThunk(
+  'products/fetchAllProduct',
+  async () => {
+    const response = await fetchAllProduct();
     return response.data;
   }
 );
 
-export const counterSlice = createSlice({
-  name: 'counter',
+export const fetchProductByFilterAsync = createAsyncThunk(
+  'products/fetchProductByFilter',
+  async (filter) => {
+    const response = await fetchProductByFilter(filter);
+    return response.data;
+  }
+);
+export const productsSlice = createSlice({
+  name: 'product',
   initialState,
   // The `reducers` field lets us define reducers and generate associated actions
   reducers: {
@@ -34,26 +40,25 @@ export const counterSlice = createSlice({
   
   extraReducers: (builder) => {
     builder
-      .addCase(incrementAsync.pending, (state) => {
+      .addCase(fetchAllProductAsync.pending, (state) => {
         state.status = 'loading';
       })
-      .addCase(incrementAsync.fulfilled, (state, action) => {
+      .addCase(fetchAllProductAsync.fulfilled, (state, action) => {
         state.status = 'idle';
-        state.value += action.payload;
+        state.products = action.payload;
+      })
+      .addCase(fetchProductByFilterAsync.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(fetchProductByFilterAsync.fulfilled, (state, action) => {
+        state.status = 'idle';
+        state.products = action.payload;
       });
   },
 });
 
-export const { increment, decrement, incrementByAmount } = counterSlice.actions;
+export const { increment, decrement, incrementByAmount } = productsSlice.actions;
 
-export const selectCount = (state) => state.counter.value;
+export const selectAllProducts = (state) => state.product.products;
 
-
-export const incrementIfOdd = (amount) => (dispatch, getState) => {
-  const currentValue = selectCount(getState());
-  if (currentValue % 2 === 1) {
-    dispatch(incrementByAmount(amount));
-  }
-};
-
-export default counterSlice.reducer;
+export default productsSlice.reducer;
