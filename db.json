@@ -552,5 +552,101 @@
         "https://i.dummyjson.com/data/products/30/thumbnail.jpg"
         ]
         }
-        ]
+        ],
+      "brands":[
+             {
+                "value":"Apple",
+                "label":"Apple",
+                "checked":false
+             },
+             {
+                "value":"Samsung",
+                "label":"Samsung",
+                "checked":false
+             },
+             {
+                "value":"OPPO",
+                "label":"OPPO",
+                "checked":true
+             },
+             {
+                "value":"Huawei",
+                "label":"Huawei",
+                "checked":false
+             },
+             {
+                "value":"Microsoft Surface",
+                "label":"Microsoft Surface",
+                "checked":false
+             },
+             {
+                "value":"Infinix",
+                "label":"Infinix",
+                "checked":false
+             },
+             {
+                "value":"HP Pavilion",
+                "label":"HP Pavilion",
+                "checked":false
+             },
+             {
+                "value":"Royal_Mirage",
+                "label":"Royal_Mirage",
+                "checked":false
+             },
+             {
+                "value":"Fog Scent Xpressio",
+                "label":"Fog Scent Xpressio",
+                "checked":false
+             },
+             {
+                "value":"Fair & Clear",
+                "label":"Fair & Clear",
+                "checked":false
+             },
+             {
+                "value":"Saaf & Khaas",
+                "label":"Saaf & Khaas",
+                "checked":false
+             },
+             {
+                "value":"fauji",
+                "label":"fauji",
+                "checked":false
+             }
+             
+      ],
+      "categories":[
+        {
+                "value":"smartphones",
+                "label":"smartphones",
+                "checked":false
+             },
+             {
+                "value":"laptops",
+                "label":"laptops",
+                "checked":false
+             },
+             {
+                "value":"fragrances",
+                "label":"fragrances",
+                "checked":true
+             },
+             {
+                "value":"skincare",
+                "label":"skincare",
+                "checked":false
+             },
+             {
+                "value":"groceries",
+                "label":"groceries",
+                "checked":false
+             },
+             {
+                "value":"home-decoration",
+                "label":"home decoration",
+                "checked":false
+             
+        }
+      ]  
 }

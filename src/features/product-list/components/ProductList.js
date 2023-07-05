@@ -20,6 +20,10 @@ import {
   fetchAllProductAsync,
   fetchProductByFilterAsync,
   selectTotalItems,
+  selectBrands,
+  selectCategories,
+  fetchBrandsAsync,
+  fetchCategoriesAsync,
 } from "../productSlice";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
 import { Link } from "react-router-dom";
@@ -30,6 +34,12 @@ export function ProductList() {
   const [filter, setFilter] = useState({});
   const [sort, setSort] = useState({});
   const [page,setPage] = useState(1)
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+  const products = useSelector(selectAllProducts);
+  const totalItems = useSelector(selectTotalItems)
+  const brands = useSelector(selectBrands)
+  const categories = useSelector(selectCategories)
+   
 
   const sortOptions = [
     { name: "Best Rating", sort: "rating", order: "desc", current: false },
@@ -52,40 +62,12 @@ export function ProductList() {
     {
       id: "brand",
       name: "Brands",
-      options: [
-        { value: "Apple", label: "Apple", checked: false },
-        { value: "Samsung", label: "Samsung", checked: false },
-        { value: "OPPO", label: "OPPO", checked: true },
-        { value: "Huawei", label: "Huawei", checked: false },
-        {
-          value: "Microsoft Surface",
-          label: "Microsoft Surface",
-          checked: false,
-        },
-        { value: "Infinix", label: "Infinix", checked: false },
-        { value: "HP Pavilion", label: "HP Pavilion", checked: false },
-        { value: "Royal_Mirage", label: "Royal_Mirage", checked: false },
-        {
-          value: "Fog Scent Xpressio",
-          label: "Fog Scent Xpressio",
-          checked: false,
-        },
-        { value: "Fair & Clear", label: "Fair & Clear", checked: false },
-        { value: "Saaf & Khaas", label: "Saaf & Khaas", checked: false },
-        { value: "fauji", label: "fauji", checked: false },
-      ],
+      options: brands,
     },
     {
       id: "category",
       name: "Category",
-      options: [
-        { value: "smartphones", label: "smartphones", checked: false },
-        { value: "laptops", label: "laptops", checked: false },
-        { value: "fragrances", label: "fragrances", checked: true },
-        { value: "skincare", label: "skincare", checked: false },
-        { value: "groceries", label: "groceries", checked: false },
-        { value: "home-decoration", label: "home decoration", checked: false },
-      ],
+      options:categories
     },
     {
       id: "size",
@@ -105,10 +87,7 @@ export function ProductList() {
     return classes.filter(Boolean).join(" ");
   }
  
-  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
-  const products = useSelector(selectAllProducts);
-  const totalItems = useSelector(selectTotalItems)
-
+ 
   
   const handelFilter = (e, section, option) => {
     
@@ -148,6 +127,11 @@ export function ProductList() {
   useEffect(()=>{
     setPage(1)
   },[totalItems,sort])
+
+  useEffect(()=>{
+    dispatch(fetchBrandsAsync())
+    dispatch(fetchCategoriesAsync())
+  },[])
   
   return (
     <div>
@@ -471,21 +455,22 @@ function DesktopFilter({filters,filter,setFilter,dispatch,handelFilter,subCatego
 }
 
 function Pagination({page,setPage,handelPage,totalItem=55}) {
+  const totalPages = Math.ceil(totalItem/ITEM_PER_PAGE);
   return (
     <div className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
     <div className="flex flex-1 justify-between sm:hidden">
-      <a
-        href="#"
+      <div
+         onClick={(e)=>handelPage(page>1 ?page-1:page)}
         className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
       >
         Previous
-      </a>
-      <a
-        href="#"
+      </div>
+      <div
+       onClick={(e)=>handelPage(page<totalPages ?page+1:page)}
         className="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
       >
         Next
-      </a>
+      </div>
     </div>
     <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
       <div>
@@ -500,15 +485,15 @@ function Pagination({page,setPage,handelPage,totalItem=55}) {
           className="isolate inline-flex -space-x-px rounded-md shadow-sm"
           aria-label="Pagination"
         >
-          <a
-            href="#"
+          <div
+             onClick={(e)=>handelPage(page>1 ?page-1:page)}
             className="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
           >
             <span className="sr-only">Previous</span>
             <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
-          </a>
+          </div>
 
-          {Array.from({length:Math.ceil(totalItem/ITEM_PER_PAGE)}).map((el,index)=>(
+          {Array.from({length:totalPages}).map((el,index)=>(
 
           <div
             onClick={(e)=>handelPage(index+1)}
@@ -520,8 +505,8 @@ function Pagination({page,setPage,handelPage,totalItem=55}) {
           </div>
           ))}
          
-          <a
-            href="#"
+          <div
+           onClick={(e)=>handelPage(page<totalPages ?page+1:page)}
             className="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
           >
             <span className="sr-only">Next</span>
@@ -529,7 +514,7 @@ function Pagination({page,setPage,handelPage,totalItem=55}) {
               className="h-5 w-5"
               aria-hidden="true"
             />
-          </a>
+          </div>
         </nav>
       </div>
     </div>
@@ -547,7 +532,7 @@ function ProductGrid({products}) {
 
       <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
         {products.map((product) => (
-          <Link to="product-details">
+          <Link to={`product-details/${product.id}`}>
             <div
               key={product.id}
               className="group relative border-solid border-2 p-2 border-zinc-200"
